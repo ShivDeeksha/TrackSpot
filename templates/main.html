@@ -1,0 +1,495 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <!-- ===============================================-->
+  <!--    Document Title-->
+  <!-- ===============================================-->
+  <title>TrackSpot</title>
+
+
+  <!-- ===============================================-->
+  <!-- Favicons -->
+  <!-- =============================================== -->
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'assets/img/favicons/apple-touch-icon.png' %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'assets/img/favicons/logo.png' %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'assets/img/favicons/logo.png' %}">
+  <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/favicons/logo.png' %}">
+  <!-- Change the href to your logo.png file -->
+  <link rel="manifest" href="{% static 'assets/img/favicons/manifest.json' %}">
+  <meta name="msapplication-TileImage" content="{% static 'assets/img/favicons/mstile-150x150.png' %}">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- Stylesheets -->
+  <link href="{% static 'assets/css/theme.css' %}" rel="stylesheet" />
+
+</head>
+
+
+
+<body>
+
+  <!-- ===============================================-->
+  <!--    Main Content-->
+  <!-- ===============================================-->
+  <main class="main" id="top">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" data-navbar-on-scroll="data-navbar-on-scroll">
+      <div class="container"><a class="navbar-brand d-flex align-items-center fw-bold fs-2" href="{% url 'index' %}">
+          <div class="text-warning">Track</div>
+          <div class="text-1000">Spot</div>
+        </a>
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+          aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse border-top border-lg-0 mt-4 mt-lg-0" id="navbarSupportedContent">
+          <ul class="navbar-nav ms-auto pt-2 pt-lg-0">
+            <li class="nav-item" data-anchor="data-anchor"><a class="nav-link fw-medium active" aria-current="page"
+                href="#top">Home</a></li>
+            <li class="nav-item" data-anchor="data-anchor"><a class="nav-link fw-medium" href="#found">Found
+                </a></li>
+                <li class="nav-item" data-anchor="data-anchor"><a class="nav-link fw-medium" href="#faq">FAQ</a></li>
+            </ul>
+          <form class="ps-lg-5">
+            <a href="{% url 'profile' %}">
+                <img src="{{ user.profile_image.url }}" alt="Profile Image" class="profile-image-icon">
+            </a></form>
+            <form class="ps-lg-5" action="{% url 'logout' %}" method="post">
+              {% csrf_token %}
+              <button class="btn btn-lg btn-primary rounded-pill order-0" type="submit">Logout</button>
+            
+        </form>
+        </div>
+      </div>
+    </nav>
+    <section class="py-0" id="home">
+      <div class="bg-holder"
+        style="background-image:url(../static/assets/img/illustrations/hero-bg.png);background-position:bottom;background-size:cover;">
+      </div>
+      <!--/.bg-holder-->
+
+      <div class="container position-relative">
+        <div class="row align-items-center py-8">
+          
+         
+        </div>
+      </div>
+    </section>
+
+    <section class="main3 items-section" id="found">
+        <section class="card found-items">
+            <h2>Found Items in Campus</h2>
+            <div class="item-list">
+                {% for item in found_items %}
+                <div class="item-card">
+                    <div class="item-image">
+                        <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                    </div>
+                    <div class="item-details">
+                        <h3>{{ item.name }}</h3>
+                        <p>Description: {{ item.description }}</p>
+                        <p>Location: {{ item.location }}</p>
+                        <!-- Add contact information if needed -->
+                        
+                    </div>
+                    <p class="{% if item.claimed %}claimed-tag{% else %}not-claimed-tag{% endif %}">
+                      {% if item.claimed %}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
+                          <path d="M8 0A8 8 0 1 0 8 16A8 8 0 0 0 8 0ZM6.5 11.793L3.354 8.646a.5.5 0 0 1 .708-.708L6 10.293l5.646-5.647a.5.5 0 0 1 .708.708L6.5 11.793Z"/>
+                        </svg>
+                      {% else %}
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4m.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2"/>
+                      </svg>
+                      {% endif %}
+                      {% if item.claimed %}Item Claimed{% else %}Not Claimed Yet{% endif %}
+                    </p><br>
+                    <!-- Button to view responses or any other action -->
+                    {% if not item.claimed %}
+            <button type="button" class="claim-button" data-bs-toggle="modal" data-bs-target="#claimModal" data-item-id="{{ item.id }}">
+                Claim Item
+            </button>
+        {% else %}
+            <button type="button" class="claim-button" style="background-color: #808080;" disabled>
+                Claim Item
+            </button>
+        {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="modal fade" id="claimModal" tabindex="-1" role="dialog" aria-labelledby="claimModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="claimModalLabel">Answer Questions</h5>
+                      
+                    </div>
+                    <div class="modal-body">
+                      <form id="claimForm" method="POST" enctype="multipart/form-data" action="{% url 'submit_answers' %}">
+                        {% csrf_token %}
+                            <input type="hidden" id="itemId" name="itemId">
+                        
+                            <!-- Display item details -->
+                            <h4>Item Details:</h4>
+                            <div class="form-group">
+                                <label for="itemName">Name:</label>
+                                <input type="text" class="form-control" id="itemName" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="itemDescription">Description:</label>
+                                <textarea class="form-control" id="itemDescription" rows="3" readonly></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="itemLocation">Location:</label>
+                                <input type="text" class="form-control" id="itemLocation" readonly>
+                            </div>
+                            
+                            <!-- Display questions -->
+                            <h4>Questions:</h4>
+                            <div id="questionList">
+                                <!-- Questions will be dynamically added here -->
+                            </div>
+                        
+                            <!-- Answer fields -->
+                            <div id="answerFields">
+                                <!-- Answer fields will be dynamically added here -->
+                            </div>
+                        
+                            <button type="submit" class="btn btn-primary">Submit Answers</button>
+                        </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <script>
+                document.getElementById("claimForm").addEventListener("submit", function(event) {
+                    event.preventDefault(); // Prevent the default form submission
+            
+                    // Fetch form data
+                    const formData = new FormData(event.target);
+            
+                    // Make AJAX request to submit answers
+                    fetch("{% url 'submit_answers' %}", {
+                        method: "POST",
+                        body: formData,
+                        headers: {
+                            "X-CSRFToken": "{{ csrf_token }}"
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Display success message in alert dialog
+                            alert(data.message);
+                        } else {
+                            // Display error message in alert dialog
+                            alert("Error: " + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        // Display error message in alert dialog
+                        alert("An error occurred while submitting answers.");
+
+                    });
+                });
+            </script>
+            
+        </section>
+
+      </section>
+
+
+    <!-- ============================================-->
+    <!-- <section> begin ============================-->
+
+    <!-- <section> close ============================-->
+    <!-- ============================================-->
+
+
+
+
+
+    <!-- ============================================-->
+    <!-- <section> begin ============================-->
+    <section class="py-8" id="faq">
+
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-8 col-lg-6 text-center mb-3">
+            <h6 class="fw-bold fs-4 display-3 lh-sm mb-3">Frequently asked questions</h6>
+            <p class="mb-5">The rise of mobile devices transforms the way we consume information entirely and the
+              world's most elevant channels such as Facebook.</p>
+          </div>
+        </div>
+        <div class="row flex-center">
+          <div class="col-lg-9">
+            <div class="accordion" id="accordionExample">
+              <div class="accordion-item mb-2">
+                <h2 class="accordion-header" id="heading1">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1"
+                    aria-expanded="true" aria-controls="collapse1"><span
+                      class="mb-0 fw-bold text-start fs-1 text-1000">How to contact with riders
+                      emergency?</span></button>
+                </h2>
+                <div class="accordion-collapse collapse show" id="collapse1" aria-labelledby="heading1"
+                  data-bs-parent="#accordionExample">
+                  <div class="accordion-body bg-100">Leverage agile frameworks to provide a robust synopsis for high
+                    level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further
+                    the overall value proposition. Organically grow the holistic world view of disruptive innovation via
+                    workplace diversity and empowerment.Bring to the table win-win survival strategies to ensure
+                    proactive domination. At the end of the day, going forward, a new normal that has evolved from
+                    generation X is on the runway heading towards a streamlined cloud solution. User generated content
+                    in real-time will have multiple touchpoints for offshoring.</div>
+                </div>
+              </div>
+              <div class="accordion-item mb-2">
+                <h2 class="accordion-header" id="heading2">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapse2" aria-expanded="true" aria-controls="collapse2"><span
+                      class="mb-0 fw-bold text-start fs-1 text-1000">App installation failed, how to update system
+                      information?</span></button>
+                </h2>
+                <div class="accordion-collapse collapse" id="collapse2" aria-labelledby="heading2"
+                  data-bs-parent="#accordionExample">
+                  <div class="accordion-body bg-100">You can issue either partial or full refunds. There are no fees to
+                    refund a charge, but the fees from the original charge are not returned.</div>
+                </div>
+              </div>
+              <div class="accordion-item mb-2">
+                <h2 class="accordion-header" id="heading3">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapse3" aria-expanded="true" aria-controls="collapse3"><span
+                      class="mb-0 fw-bold text-start fs-1 text-1000">Website reponse taking time, how to
+                      improve?</span></button>
+                </h2>
+                <div class="accordion-collapse collapse" id="collapse3" aria-labelledby="heading3"
+                  data-bs-parent="#accordionExample">
+                  <div class="accordion-body bg-100">Disputed payments (also known as chargebacks) incur a $15.00 fee.
+                    If the customer’s bank resolves the dispute in your favor, the fee is fully refunded.</div>
+                </div>
+              </div>
+              <div class="accordion-item mb-2">
+                <h2 class="accordion-header" id="heading4">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapse4" aria-expanded="true" aria-controls="collapse4"><span
+                      class="mb-0 fw-bold text-start fs-1 text-1000">New update fixed all bug and issues</span></button>
+                </h2>
+                <div class="accordion-collapse collapse" id="collapse4" aria-labelledby="heading4"
+                  data-bs-parent="#accordionExample">
+                  <div class="accordion-body bg-100">There are no additional fees for using our mobile SDKs or to accept
+                    payments using consumer wallets like Apple Pay or Google Pay.</div>
+                </div>
+              </div>
+              <div class="accordion-item mb-2">
+                <h2 class="accordion-header" id="heading5">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapse5" aria-expanded="true" aria-controls="collapse5"><span
+                      class="mb-0 fw-bold text-start fs-1 text-1000">How to contact with riders
+                      emergency?</span></button>
+                </h2>
+                <div class="accordion-collapse collapse" id="collapse5" aria-labelledby="heading5"
+                  data-bs-parent="#accordionExample">
+                  <div class="accordion-body bg-100">There are no additional fees for using our mobile SDKs or to accept
+                    payments using consumer wallets like Apple Pay or Google Pay.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end of .container-->
+
+    </section>
+    <!-- <section> close ============================-->
+    <!-- ============================================-->
+
+
+    <!-- ============================================-->
+    <!-- <section> begin ============================-->
+    <section class="py-81 bg-1000">
+
+      <div class="container">
+        <div class="row flex-center">
+          <div class="col-auto mb-5"><a class="pe-2 d-flex align-items-center text-decoration-none fw-bold fs-3"
+              href="#">
+              <div class="text-warning">Track</div>
+              <div class="text-white">Spot</div>
+            </a></div>
+        </div>
+        <div class="row flex-center">
+          <div class="col-auto mb-5">
+            <ul class="list-unstyled list-inline mb-0">
+              <li class="list-inline-item me3 me-sm-4"><a class="text-light text-decoration-none" href="#top">Home</a>
+              </li>
+              <li class="list-inline-item me3 me-sm-4"><a class="text-light text-decoration-none" href="#found">Found</a></li>
+              <li class="list-inline-item me3 me-sm-4"><a class="text-light text-decoration-none" href="#lost">Claimed</a></li>
+              <li class="list-inline-item me3 me-sm-4"><a class="text-light text-decoration-none" href="#faq">FAQ</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+      <!-- end of .container-->
+
+    </section>
+    <!-- <section> close ============================-->
+    <!-- ============================================-->
+
+
+  </main>
+  <!-- ===============================================-->
+  <!--    End of Main Content-->
+  <!-- ===============================================-->
+
+
+<!-- 
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get the modal
+        var modal = document.getElementById('claimModal');
+
+        // Get the button that opens the modal
+        var buttons = document.querySelectorAll('.claim-button');
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal
+        buttons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                var itemId = this.getAttribute('data-item-id');
+                document.getElementById('itemId').value = itemId;
+
+                // Fetch item details using AJAX
+                fetchItemDetails(itemId);
+                
+                // Display the modal
+                modal.style.display = "block";
+            });
+        });
+
+        // When the user clicks on <span> (x), close the modal
+        span.addEventListener('click', function () {
+            modal.style.display = "none";
+        });
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.addEventListener('click', function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        });
+
+        // Fetch item details function
+        function fetchItemDetails(itemId) {
+            // Make an AJAX call to fetch item details
+            // You can replace this with your actual AJAX call to fetch item details
+            // Sample code below, assuming you have a URL to fetch item details
+            fetch('/get_item_details/' + itemId)
+                .then(response => response.json())
+                .then(data => {
+                    // Update modal with item details
+                    document.getElementById('itemName').value = data.name;
+                    document.getElementById('itemDescription').value = data.description;
+                    document.getElementById('itemLocation').value = data.location;
+
+                    // Update questions list (assuming you have a function to update the questions list)
+                    updateQuestionList(data.questions);
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Function to update questions list
+        function updateQuestionList(questions) {
+            var questionList = document.getElementById('questionList');
+            questionList.innerHTML = ''; // Clear previous list
+
+            questions.forEach(function (question) {
+                var li = document.createElement('li');
+                li.innerHTML = '<p>' + question.text + '</p>';
+                questionList.appendChild(li);
+            });
+        }
+    });
+</script> -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Function to fetch item details
+        function fetchItemDetails(itemId) {
+            // Make an AJAX call to fetch item details
+            // Replace '/get_item_details/' with the appropriate URL endpoint
+            fetch('/get_item_details/' + itemId)
+                .then(response => response.json())
+                .then(data => {
+                    // Update item details
+                    document.getElementById('itemName').value = data.name;
+                    document.getElementById('itemDescription').value = data.description;
+                    document.getElementById('itemLocation').value = data.location;
+
+                    // Update questions list
+                    updateQuestionList(data.questions);
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Function to update questions list
+        function updateQuestionList(questions) {
+            var questionList = document.getElementById('questionList');
+            questionList.innerHTML = ''; // Clear previous list
+
+            questions.forEach(function (question, index) {
+                // Create label for question
+                var label = document.createElement('label');
+                label.textContent = question.text;
+                questionList.appendChild(label);
+
+                // Create input field for answer
+                var input = document.createElement('input');
+                input.type = 'text';
+                input.classList.add('form-control');
+                input.name = 'answer' + (index + 1); // Set name for submission
+                input.required = true; // Make answer field required
+                questionList.appendChild(input);
+
+                // Add line break for spacing
+                questionList.appendChild(document.createElement('br'));
+            });
+        }
+
+        // Event listener for claim button clicks
+        var buttons = document.querySelectorAll('.claim-button');
+        buttons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                var itemId = this.getAttribute('data-item-id');
+                document.getElementById('itemId').value = itemId;
+
+                // Fetch item details
+                fetchItemDetails(itemId);
+            });
+        });
+    });
+</script>
+ 
+
+  <!-- ===============================================-->
+  <!--    JavaScripts-->
+  <!-- ===============================================-->
+  <script src="{% static 'vendors/@popperjs/popper.min.js' %}"></script>
+  <script src="{% static 'vendors/bootstrap/bootstrap.min.js' %}"></script>
+  <script src="{% static 'vendors/is/is.min.js' %}"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
+  <script src="{% static 'assets/js/theme.js' %}"></script>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400&amp;display=swap"
+    rel="stylesheet">
+</body>
+
+</html>

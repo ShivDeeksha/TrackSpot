@@ -1,0 +1,628 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <!-- ===============================================-->
+  <!--    Document Title-->
+  <!-- ===============================================-->
+  <title>TrackSpot</title>
+
+
+  <!-- ===============================================-->
+  <!-- Favicons -->
+  <!-- =============================================== -->
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'assets/img/favicons/apple-touch-icon.png' %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'assets/img/favicons/logo.png' %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'assets/img/favicons/logo.png' %}">
+  <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/favicons/logo.png' %}">
+  <!-- Change the href to your logo.png file -->
+  <link rel="manifest" href="{% static 'assets/img/favicons/manifest.json' %}">
+  <meta name="msapplication-TileImage" content="{% static 'assets/img/favicons/mstile-150x150.png' %}">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- Stylesheets -->
+  <link href="{% static 'assets/css/theme.css' %}" rel="stylesheet" />
+  <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet"> -->
+
+
+</head>
+
+
+
+<body>
+
+  <!-- ===============================================-->
+  <!--    Main Content-->
+  <!-- ===============================================-->
+  <main class="main" id="top">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" data-navbar-on-scroll="data-navbar-on-scroll">
+      <div class="container"><a class="navbar-brand d-flex align-items-center fw-bold fs-2" href="{% url 'index' %}">
+          <div class="text-warning">Track</div>
+          <div class="text-1000">Spot</div>
+        </a>
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+          aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse border-top border-lg-0 mt-4 mt-lg-0" id="navbarSupportedContent">
+          <ul class="navbar-nav ms-auto pt-2 pt-lg-0">
+            <li class="nav-item"><a class="nav-link fw-medium active" aria-current="page"
+                href="{% url 'main_page' %}">Home</a></li>
+            <li class="nav-item"><a class="nav-link fw-medium" href="#features">Key
+                Features</a></li>
+            <li class="nav-item"><a class="nav-link fw-medium" href="#faq">FAQ</a></li>
+          </ul>
+          <button class="notify-button" data-bs-toggle="modal" data-bs-target="#notificationModal">
+            <svg viewBox="0 0 448 512" class="bell">
+              <path
+                d="M224 0c-17.7 0-32 14.3-32 32V49.9C119.5 61.4 64 124.2 64 200v33.4c0 45.4-15.5 89.5-43.8 124.9L5.3 377c-5.8 7.2-6.9 17.1-2.9 25.4S14.8 416 24 416H424c9.2 0 17.6-5.3 21.6-13.6s2.9-18.2-2.9-25.4l-14.9-18.6C399.5 322.9 384 278.8 384 233.4V200c0-75.8-55.5-138.6-128-150.1V32c0-17.7-14.3-32-32-32zm0 96h8c57.4 0 104 46.6 104 104v33.4c0 47.9 13.9 94.6 39.7 134.6H72.3C98.1 328 112 281.3 112 233.4V200c0-57.4 46.6-104 104-104h8zm64 352H224 160c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7s18.7-28.3 18.7-45.3z">
+              </path>
+            </svg>
+          </button>
+          <form class="ps-lg-5" action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button class="btn btn-lg btn-primary rounded-pill order-0" type="submit">Logout</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <!-- Notifications will be dynamically added here -->
+            <!-- Notifications Container -->
+            <div id="notificationsContainer">
+              <!-- Loop through notifications and generate HTML -->
+              {% for notification in notifications %}
+              <div class="notifications-container {{ notification.type }}">
+                <div class="flex">
+                  <div class="flex-shrink-0">
+                    <svg class="succes-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                      aria-hidden="true">
+                      <path fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clip-rule="evenodd"></path>
+                    </svg>
+                  </div>
+                  <div class="success-prompt-wrap">
+                    <p class="success-prompt-heading">Appoved</p>
+                    <div class="success-prompt-prompt">
+                      <p>{{ notification.message }}</p>
+                    </div>
+                    <div class="success-button-container">
+                      <button type="button" class="success-button-secondary" data-dismiss="modal">Congratulations
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="main2">
+      <section class="profile-section">
+        <section class="card profile-card">
+          <div class="profile-details">
+            <div class="profile-background"></div> <!-- New div for the background -->
+            <div class="profilepic" id="profile-pic">
+              {% if user.profile_image %}
+              <img class="profilepic__image" src="{{ user.profile_image.url }}" alt="Profile Image">
+              {% else %}
+              <!-- Display a default image if no profile image exists -->
+              <img class="profilepic__image"
+                src="https://img.freepik.com/premium-photo/3d-cat-wearing-cute-clothes_602089-8563.jpg"
+                alt="Default Profile Image">
+              {% endif %}
+              <div class="profilepic__content" id="upload-overlay">
+                <span class="profilepic__icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                    class="bi bi-camera" viewBox="0 0 16 16">
+                    <path
+                      d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4z" />
+                    <path
+                      d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5m0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0" />
+                  </svg>
+                </span>
+                <span class="profilepic__text"></span>
+                <!-- Input for uploading image -->
+                <form method="post" enctype="multipart/form-data" id="profile-pic-form">
+                  {% csrf_token %}
+                  <input type="file" id="profile-pic-upload" name="profile_image" style="display: none;"
+                    accept="image/*">
+
+                </form>
+              </div>
+            </div>
+
+            <div class="profile-info">
+              <p><strong>Name:</strong> {{ user.first_name }} {{ user.middle_name }} {{ user.last_name }}</p>
+              <p><strong>Username:</strong> {{ user.username }}</p>
+              <p><strong>Email:</strong> {{ user.email }}</p>
+              <p><strong>Phone number:</strong> {{ user.phone_number }}</p>
+              <p><strong>PRN number:</strong> {{ user.prn_number }}</p>
+            </div>
+
+            <button type="button" class="claim-button1" data-bs-toggle="modal" data-bs-target="#uploadModal">
+              Upload Item
+            </button>
+          </div>
+          <!-- Modal -->
+
+          <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="uploadModalLabel">Upload Lost or Found Item</h5>
+                 
+                </div>
+                <div class="modal-body">
+                  <form id="uploadForm" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <label for="uploadImage">Upload Image</label>
+                      <input type="file" class="form-control" id="uploadImage" name="image" accept="image/*" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="name">Name</label>
+                      <input type="text" class="form-control" id="name" name="name" required></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label for="description">Description</label>
+                      <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label for="location">Location</label>
+                      <input type="text" class="form-control" id="location" name="location" required></textarea>
+                    </div>
+                    <div id="questions">
+                      <div class="form-group">
+                        <label for="question1">Question 1</label>
+                        <input type="text" class="form-control" id="question1" name="questions[]" required>
+                      </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary" id="addQuestion">Add Question</button>
+                    <hr>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </section>
+      </section>
+
+
+      <section class="items-section">
+        <section class="card found-items">
+          <h2>Your Found Items</h2>
+          <div class="item-list">
+            {% if uploaded_items %}
+
+            {% for item in uploaded_items %}
+
+            <div class="item-card">
+              <div class="item-image">
+                <img src="{{ item.image.url }}" alt="{{ item.name }}">
+              </div>
+              <div class="item-details">
+                <h3>{{ item.name }}</h3>
+                <p>Description: {{ item.description }}</p>
+                <p>Location: {{ item.location }}</p>
+                <p>Contact: {{ item.contact }}</p>
+              </div>
+              <p class="{% if item.claimed %}claimed-tag{% else %}not-claimed-tag{% endif %}">
+                {% if item.claimed %}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
+                    <path d="M8 0A8 8 0 1 0 8 16A8 8 0 0 0 8 0ZM6.5 11.793L3.354 8.646a.5.5 0 0 1 .708-.708L6 10.293l5.646-5.647a.5.5 0 0 1 .708.708L6.5 11.793Z"/>
+                  </svg>
+                {% else %}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
+                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4m.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2"/>
+                </svg>
+                {% endif %}
+                {% if item.claimed %}Item Claimed{% else %}Not Claimed Yet{% endif %}
+              </p>
+              
+              <div class="button-group">
+                <form method="post" action="{% url 'profile' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="delete_item" value="{{ item.id }}">
+                  <!-- Use the FontAwesome trash icon for delete -->
+                  <button type="submit" class="delete-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                      <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+                    </svg>
+                  </button>
+                </form>
+                {% if not item.claimed %}
+                <button type="button" class="claim-button" data-bs-toggle="modal" data-bs-target="#claimModal" data-item-id="{{ item.id }}">
+                    See Responses
+                </button>
+            {% else %}
+                <button type="button" class="claim-button" style="background-color: #808080;" disabled>
+                    See Responses
+                </button>
+            {% endif %}              </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p>No items uploaded yet.</p>
+            {% endif %}
+            <!-- Modal Popup -->
+            <!-- Modal for responses -->
+            <div class="modal fade" id="claimModal" tabindex="-1" role="dialog" aria-labelledby="claimModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="claimModalLabel">Claim Details</h5>
+                    
+                    <input type="hidden" id="itemId" name="itemId" value="">
+                    <input type="hidden" id="userId" name="userId" value=""> <!-- Add hidden input for userId -->
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="display: none;">
+                      
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <h4 id="itemName"></h4>
+
+                    <p id="itemDescription"></p>
+                    <p id="itemLocation"></p>
+                    <div id="claimDetails" class="row">
+                      <input type="hidden" id="userId" name="userId" value=""> <!-- Add hidden input for userId -->
+
+                      <!-- Claim details will be dynamically added here -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <script>
+              
+              document.addEventListener('DOMContentLoaded', function () {
+                var groupedClaims; // Define groupedClaims outside the scope of the event listener
+
+                // Event listener for claim button clicks
+                var buttons = document.querySelectorAll('.claim-button');
+                buttons.forEach(function (button) {
+                  button.addEventListener('click', function () {
+                    var itemId = this.getAttribute('data-item-id');
+                    document.getElementById('itemId').value = itemId;
+
+                    // Fetch item details and claims
+                    fetchItemDetails(itemId);
+                    $('#claimModal').modal('show');
+                  });
+                });
+
+                function fetchItemDetails(itemId) {
+                  // Make an AJAX call to fetch item details
+                  fetch('/get_item_details/' + itemId)
+                    .then(response => response.json())
+                    .then(data => {
+                      // Update modal with item details
+                      document.getElementById('itemName').textContent = data.name;
+                      document.getElementById('itemDescription').textContent = data.description;
+                      document.getElementById('itemLocation').textContent = data.location;
+
+                      // Fetch claims and responses
+                      fetchClaimsAndResponses(itemId);
+                    })
+                    .catch(error => console.error('Error fetching item details:', error));
+                }
+
+                function fetchClaimsAndResponses(itemId) {
+                  // Make an AJAX call to fetch claims and responses
+                  fetch('/get_claims_and_responses/' + itemId)
+                    .then(response => response.json())
+                    .then(data => {
+                      console.log('Received claims and responses:', data); // Log the received data for debugging
+
+                      if (!data || data.length === 0) {
+                        console.error('No responses found');
+                        return;
+                      }
+
+                      // Group responses by claimer
+                      groupedClaims = {}; // Assign data to groupedClaims
+                      data.forEach(function (claim) {
+                        if (!groupedClaims[claim.user__username]) {
+                          groupedClaims[claim.user__username] = [];
+                        }
+                        groupedClaims[claim.user__username].push({
+                          question: claim.question__text,
+                          answer: claim.answer_text,
+                          userId: claim.user_id
+                          
+                        });
+                      });
+
+                      // Construct HTML for claim details
+                      var claimDetailsHtml = '';
+
+                      for (var claimer in groupedClaims) {
+                        claimDetailsHtml += '<div class="claim-card">';
+                        claimDetailsHtml += '<h5>Name: ' + claimer + '</h5>';
+                        claimDetailsHtml += '<h5 class="user-id">UserID: ' + groupedClaims[claimer][0].userId + '</h5>'; // Use the first claim's user ID
+                        claimDetailsHtml += '<h6>Responses:</h6>';
+                        claimDetailsHtml += '<ul>';
+                        groupedClaims[claimer].forEach(function (response) {
+                          claimDetailsHtml += '<li><strong>' + response.question + '</strong>: ' + response.answer +
+                            '</li>';
+                        });
+
+                        // Include the item ID within each claim card
+                        // Assuming you have access to the item ID from the data object
+                        claimDetailsHtml += '<p class="item-id" style="display: none;">Item ID: ' + itemId +
+                          '</p>';
+
+                        claimDetailsHtml += '</ul>';
+                        // Add the approve button
+                        claimDetailsHtml +=
+                          '<button class="btn btn-primary approve-btn">Approve</button>'; // Remove data-user-id attribute
+                        claimDetailsHtml += '</div>';
+                      }
+
+                      // Update modal with claim details
+                      document.getElementById('claimDetails').innerHTML = claimDetailsHtml;
+
+                      // Add event listener to the approve button
+                      addApproveButtonListener();
+                    })
+                    .catch(error => console.error('Error fetching claims and responses:', error));
+                }
+
+                function addApproveButtonListener() {
+                  var approveButtons = document.querySelectorAll('.approve-btn');
+                  approveButtons.forEach(function (button) {
+                    button.addEventListener('click', function () {
+                      var userIdElement = this.parentNode.querySelector('.user-id');
+                      var userId = userIdElement ? userIdElement.textContent.trim().split(':')[1].trim() : null; // Get userId from claim card
+
+                      if (!userId) {
+                        console.error('User ID not found in claim card');
+                        return;
+                      }
+
+                      var itemId = document.getElementById('itemId').value; // Get itemId from hidden input field
+                      console.log('Approving claim for User ID:', userId);
+                      console.log('Item ID:', itemId);
+
+                      approveClaim(itemId, userId);
+                    });
+                  });
+                }
+
+                function approveClaim(itemId, userId) {
+                  console.log('Approving claim for User ID:', userId);
+
+                  // Make an AJAX call to fetch item details including the claimed status
+                  fetch('/get_item_details/' + itemId)
+                    .then(response => response.json())
+                    .then(data => {
+                      if (data.claimed) {
+                        // If the item is claimed, display an alert
+                        alert('This item is already claimed!');
+                      } else {
+                        // If the item is not claimed, proceed with approving the claim
+                        // Make an AJAX call to approve the claim
+                        fetch('/approve_claim/', {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded', // Change content type
+                            'X-CSRFToken': getCookie('csrftoken')
+                          },
+                          body: new URLSearchParams({
+                            'itemId': itemId,
+                            'userId': userId
+                          })
+                        })
+                          .then(response => response.json())
+                          .then(data => {
+                            if (data.success) {
+                              // Show success message or handle as needed
+                              console.log('Claim approved successfully');
+                              alert('Claim Approved Successfully!');
+                            } else {
+                              console.error('Error approving claim:', data.error);
+                            }
+                          })
+                          .catch(error => console.error('Error approving claim:', error));
+                      }
+                    })
+                    .catch(error => console.error('Error fetching item details:', error));
+                }
+
+              });
+
+            </script>
+                    </div>
+        </section>
+
+        <section class="card lost-items">
+          <h2>Your Lost Items</h2>
+          <div class="item-list">
+            {% if claimed_items %}
+
+            {% for item in claimed_items %}
+
+            <div class="item-card">
+              <div class="item-image">
+                <img src="{{ item.image.url }}" alt="{{ item.name }}">
+              </div>
+              <div class="item-details">
+                <h3>{{ item.name }}</h3>
+                <p>Description: {{ item.description }}</p>
+                <p>Location: {{ item.location }}</p>
+                <p>Contact: {{ item.contact }}</p>
+              </div>
+
+                <p class="{% if item.claimed %}claimed-tag{% else %}not-claimed-tag{% endif %}">
+                  {% if item.claimed %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
+                      <path d="M8 0A8 8 0 1 0 8 16A8 8 0 0 0 8 0ZM6.5 11.793L3.354 8.646a.5.5 0 0 1 .708-.708L6 10.293l5.646-5.647a.5.5 0 0 1 .708.708L6.5 11.793Z"/>
+                    </svg>
+                  {% else %}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4m.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2"/>
+                  </svg>
+                  {% endif %}
+                  {% if item.claimed %}Item Claimed{% else %}Not Claimed Yet{% endif %}
+                </p>
+
+            </div>
+            {% endfor %}
+            {% else %}
+            <p>No items uploaded yet.</p>
+            {% endif %}
+            </div>
+        </section>
+      </section>
+    </div>
+
+    <!-- ============================================-->
+    <!-- <section> begin ============================-->
+    <section class="py-81 bg-1000">
+
+      <div class="container">
+        <div class="row flex-center">
+          <div class="col-auto mb-5"><a class="pe-2 d-flex align-items-center text-decoration-none fw-bold fs-3"
+              href="#">
+              <div class="text-warning">Track</div>
+              <div class="text-white">Spot</div>
+            </a></div>
+        </div>
+        <div class="row flex-center">
+          <div class="col-auto mb-5">
+            <ul class="list-unstyled list-inline mb-0">
+              <li class="list-inline-item me3 me-sm-4"><a class="text-light text-decoration-none" href="#top">Home</a>
+              </li>
+              <li class="list-inline-item me3 me-sm-4"><a class="text-light text-decoration-none" href="#features">Key
+                  Features</a></li>
+              <li class="list-inline-item me3 me-sm-4"><a class="text-light text-decoration-none" href="#faq">FAQ</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+      <!-- end of .container-->
+
+    </section>
+    <!-- <section> close ============================-->
+    <!-- ============================================-->
+
+
+  </main>
+  <!-- ===============================================-->
+  <!--    End of Main Content-->
+  <!-- ===============================================-->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Function to show the modal when the button is clicked
+      $('.btn-primary[data-bs-toggle="modal"]').click(function () {
+        var targetModal = $(this).attr('data-bs-target');
+        $(targetModal).modal('show');
+      });
+
+      // JavaScript code for dynamically adding questions
+      var questionCount = 1;
+
+      $('#addQuestion').click(function () {
+        questionCount++;
+        var questionInput = '<div class="form-group"><label for="question' + questionCount + '">Question ' + questionCount + '</label><input type="text" class="form-control" id="question' + questionCount + '" name="questions[]" required></div>';
+        $('#questions').append(questionInput);
+      });
+
+      $('.close').click(function () {
+        var targetModal = $(this).closest('.modal');
+        $(targetModal).modal('hide');
+      });
+
+      // Handle modal close event
+      $('.modal').on('hidden.bs.modal', function (e) {
+        $('.modal-backdrop').toggleClass('show'); // Toggle visibility of modal backdrop
+      });
+    });
+  </script>
+
+  <script>
+    // Get the input element and add event listener to handle file selection
+    document.addEventListener('DOMContentLoaded', function () {
+      // Get the camera icon element
+      const cameraIcon = document.querySelector('.profilepic__icon');
+
+      // Get the file input element
+      const fileInput = document.getElementById('profile-pic-upload');
+
+      // Add click event listener to the camera icon
+      cameraIcon.addEventListener('click', () => {
+        // Trigger click event on file input
+        fileInput.click();
+      });
+
+      // Add change event listener to the file input
+      fileInput.addEventListener('change', (event) => {
+        // Submit the form when the file input changes
+        document.getElementById('profile-pic-form').submit();
+
+        // Get the selected file
+        const selectedFile = event.target.files[0];
+
+        // Do something with the selected file, such as displaying a preview or uploading it
+        if (selectedFile) {
+          // Example: Display the selected image as a preview
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            const profileImage = document.querySelector('.profilepic__image');
+            profileImage.src = e.target.result;
+          };
+          reader.readAsDataURL(selectedFile);
+        }
+      });
+    });
+  </script>
+
+  <!-- ===============================================-->
+  <!--    JavaScripts-->
+  <!-- ===============================================-->
+  <script src="{% static 'vendors/@popperjs/popper.min.js' %}"></script>
+  <script src="{% static 'vendors/bootstrap/bootstrap.min.js' %}"></script>
+  <script src="{% static 'vendors/is/is.min.js' %}"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
+  <script src="{% static 'assets/js/theme.js' %}"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> -->
+
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400&amp;display=swap"
+    rel="stylesheet">
+</body>
+
+</html>
