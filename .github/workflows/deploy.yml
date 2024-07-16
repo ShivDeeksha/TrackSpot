@@ -63,4 +63,4 @@ jobs:
         -H "Accept: application/json" \
         -H "Authorization: Bearer $RENDER_API_KEY" \
         -d '' \
-        https://api.render.com/v1/services/srv-cqb4ujg8fa8c73b1569g/deploys
+        https://api.render.com/v1/services/srv-cqbb4i6ehbks73dna8a0/deploys
