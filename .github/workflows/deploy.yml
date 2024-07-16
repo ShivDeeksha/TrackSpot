@@ -39,26 +39,28 @@ jobs:
         pip install -r requirements.txt
 
     - name: Set up environment
-      run: echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+      run: |
+        echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+        echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
+        echo "DB_USER=${{ secrets.DB_USER }}" >> .env
+        echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+        echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+        echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
 
     - name: Run migrations
-      env:
-        DB_NAME: ${{ secrets.DB_NAME }}
-        DB_USER: ${{ secrets.DB_USER }}
-        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        DB_HOST: ${{ secrets.DB_HOST }}
-        DB_PORT: ${{ secrets.DB_PORT }}
-        SSL_MODE: require
       run: |
         python manage.py migrate
 
     - name: Run tests
-      env:
-        DB_NAME: ${{ secrets.DB_NAME }}
-        DB_USER: ${{ secrets.DB_USER }}
-        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        DB_HOST: ${{ secrets.DB_HOST }}
-        DB_PORT: ${{ secrets.DB_PORT }}
-        SSL_MODE: require
       run: |
         python manage.py test
+
+    - name: Trigger Render Deploy
+      env:
+        RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+      run: |
+        curl -X POST \
+        -H "Accept: application/json" \
+        -H "Authorization: Bearer $RENDER_API_KEY" \
+        -d '' \
+        https://api.render.com/v1/services/SERVICE_ID/deploys
