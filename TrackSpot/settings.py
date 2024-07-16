@@ -101,11 +101,11 @@ DATABASES = {
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT', '5432'),
+        'PORT': os.getenv('DB_PORT'),
         'OPTIONS': {
-            'sslmode': 'require',  # Ensure this matches your PostgreSQL server configuration
+            'sslmode': os.getenv('SSL_MODE', 'require'),
         },
-    },
+    }
 }
 
 
