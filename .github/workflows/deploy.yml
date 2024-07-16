@@ -13,9 +13,9 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_DB: your_db_name
-          POSTGRES_USER: your_db_user
-          POSTGRES_PASSWORD: your_db_password
+          POSTGRES_DB: ${{ secrets.DB_NAME }}
+          POSTGRES_USER: ${{ secrets.DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
         ports:
           - 5432:5432
         options: >-
@@ -43,20 +43,22 @@ jobs:
 
     - name: Run migrations
       env:
-        DB_NAME: your_db_name
-        DB_USER: your_db_user
-        DB_PASSWORD: your_db_password
-        DB_HOST: localhost
-        DB_PORT: 5432
+        DB_NAME: ${{ secrets.DB_NAME }}
+        DB_USER: ${{ secrets.DB_USER }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        DB_HOST: ${{ secrets.DB_HOST }}
+        DB_PORT: ${{ secrets.DB_PORT }}
+        SSL_MODE: require
       run: |
         python manage.py migrate
 
     - name: Run tests
       env:
-        DB_NAME: your_db_name
-        DB_USER: your_db_user
-        DB_PASSWORD: your_db_password
-        DB_HOST: localhost
-        DB_PORT: 5432
+        DB_NAME: ${{ secrets.DB_NAME }}
+        DB_USER: ${{ secrets.DB_USER }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        DB_HOST: ${{ secrets.DB_HOST }}
+        DB_PORT: ${{ secrets.DB_PORT }}
+        SSL_MODE: require
       run: |
         python manage.py test

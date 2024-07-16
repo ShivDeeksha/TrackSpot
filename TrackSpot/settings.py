@@ -104,9 +104,11 @@ DATABASES = {
         'PORT': os.getenv('DB_PORT'),
         'OPTIONS': {
             'sslmode': os.getenv('SSL_MODE', 'require'),
+            'sslrootcert': os.path.join(BASE_DIR, 'ca.pem')  # If your provider requires a CA certificate
         },
     }
 }
+
 
 
 # DATABASES = {
