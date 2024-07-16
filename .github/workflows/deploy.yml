@@ -1,0 +1,62 @@
+name: Deploy to Render
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: your_db_name
+          POSTGRES_USER: your_db_user
+          POSTGRES_PASSWORD: your_db_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.12'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Set up environment
+      run: echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+
+    - name: Run migrations
+      env:
+        DB_NAME: your_db_name
+        DB_USER: your_db_user
+        DB_PASSWORD: your_db_password
+        DB_HOST: localhost
+        DB_PORT: 5432
+      run: |
+        python manage.py migrate
+
+    - name: Run tests
+      env:
+        DB_NAME: your_db_name
+        DB_USER: your_db_user
+        DB_PASSWORD: your_db_password
+        DB_HOST: localhost
+        DB_PORT: 5432
+      run: |
+        python manage.py test
