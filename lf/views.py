@@ -18,10 +18,9 @@ from django.urls import reverse
 def custom_404(request, exception):
     # Redirect users to the login page
     return redirect(reverse('login'))
-
+    
 def index(request):
     return render(request,'index.html')
-
 
 @require_POST
 def check_username_availability(request):
@@ -183,15 +182,24 @@ def submit_answers(request):
 
 
         
+
+
 @login_required
 def get_claims_and_responses(request, item_id):
     try:
-        claims = Answer.objects.filter(item_id=item_id).values('user_id', 'user__username', 'user__websiteuser__profile_image', 'question__text', 'answer_text')
+        claims = Answer.objects.filter(item_id=item_id).values(
+            'user_id',
+            'user__username',
+            'user__profile_image',
+            'question__text',
+            'answer_text'
+        )
         return JsonResponse(list(claims), safe=False)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
-    
+
+
 import logging
 logger = logging.getLogger(__name__)
 

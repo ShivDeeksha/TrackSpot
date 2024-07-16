@@ -172,7 +172,7 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title" id="uploadModalLabel">Upload Lost or Found Item</h5>
-                 
+
                 </div>
                 <div class="modal-body">
                   <form id="uploadForm" method="POST" enctype="multipart/form-data">
@@ -233,37 +233,45 @@
               </div>
               <p class="{% if item.claimed %}claimed-tag{% else %}not-claimed-tag{% endif %}">
                 {% if item.claimed %}
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
-                    <path d="M8 0A8 8 0 1 0 8 16A8 8 0 0 0 8 0ZM6.5 11.793L3.354 8.646a.5.5 0 0 1 .708-.708L6 10.293l5.646-5.647a.5.5 0 0 1 .708.708L6.5 11.793Z"/>
-                  </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                  class="bi bi-check-circle" viewBox="0 0 16 16">
+                  <path
+                    d="M8 0A8 8 0 1 0 8 16A8 8 0 0 0 8 0ZM6.5 11.793L3.354 8.646a.5.5 0 0 1 .708-.708L6 10.293l5.646-5.647a.5.5 0 0 1 .708.708L6.5 11.793Z" />
+                </svg>
                 {% else %}
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
-                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4m.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                  class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
+                  <path
+                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4m.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2" />
                 </svg>
                 {% endif %}
                 {% if item.claimed %}Item Claimed{% else %}Not Claimed Yet{% endif %}
               </p>
-              
+
               <div class="button-group">
                 <form method="post" action="{% url 'profile' %}">
                   {% csrf_token %}
                   <input type="hidden" name="delete_item" value="{{ item.id }}">
                   <!-- Use the FontAwesome trash icon for delete -->
                   <button type="submit" class="delete-button">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
-                      <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                      class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                      <path
+                        d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5" />
                     </svg>
                   </button>
                 </form>
                 {% if not item.claimed %}
-                <button type="button" class="claim-button" data-bs-toggle="modal" data-bs-target="#claimModal" data-item-id="{{ item.id }}">
-                    See Responses
+                <button type="button" class="claim-button" data-bs-toggle="modal" data-bs-target="#claimModal"
+                  data-item-id="{{ item.id }}">
+                  See Responses
                 </button>
-            {% else %}
+                {% else %}
                 <button type="button" class="claim-button" style="background-color: #808080;" disabled>
-                    See Responses
+                  See Responses
                 </button>
-            {% endif %}              </div>
+                {% endif %}
+              </div>
             </div>
             {% endfor %}
             {% else %}
@@ -277,11 +285,11 @@
                 <div class="modal-content">
                   <div class="modal-header">
                     <h5 class="modal-title" id="claimModalLabel">Claim Details</h5>
-                    
+
                     <input type="hidden" id="itemId" name="itemId" value="">
                     <input type="hidden" id="userId" name="userId" value=""> <!-- Add hidden input for userId -->
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="display: none;">
-                      
+
                     </button>
                   </div>
                   <div class="modal-body">
@@ -300,7 +308,7 @@
             </div>
 
             <script>
-              
+
               document.addEventListener('DOMContentLoaded', function () {
                 var groupedClaims; // Define groupedClaims outside the scope of the event listener
 
@@ -339,7 +347,11 @@
                     .then(response => response.json())
                     .then(data => {
                       console.log('Received claims and responses:', data); // Log the received data for debugging
-
+                      // Ensure data is an array or handle non-array responses appropriately
+                      if (!Array.isArray(data)) {
+                        console.error('Expected an array but received:', data);
+                        return;
+                      }
                       if (!data || data.length === 0) {
                         console.error('No responses found');
                         return;
@@ -355,7 +367,7 @@
                           question: claim.question__text,
                           answer: claim.answer_text,
                           userId: claim.user_id
-                          
+
                         });
                       });
 
@@ -458,7 +470,7 @@
               });
 
             </script>
-                    </div>
+          </div>
         </section>
 
         <section class="card lost-items">
@@ -479,25 +491,29 @@
                 <p>Contact: {{ item.contact }}</p>
               </div>
 
-                <p class="{% if item.claimed %}claimed-tag{% else %}not-claimed-tag{% endif %}">
-                  {% if item.claimed %}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
-                      <path d="M8 0A8 8 0 1 0 8 16A8 8 0 0 0 8 0ZM6.5 11.793L3.354 8.646a.5.5 0 0 1 .708-.708L6 10.293l5.646-5.647a.5.5 0 0 1 .708.708L6.5 11.793Z"/>
-                    </svg>
-                  {% else %}
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
-                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4m.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2"/>
-                  </svg>
-                  {% endif %}
-                  {% if item.claimed %}Item Claimed{% else %}Not Claimed Yet{% endif %}
-                </p>
+              <p class="{% if item.claimed %}claimed-tag{% else %}not-claimed-tag{% endif %}">
+                {% if item.claimed %}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                  class="bi bi-check-circle" viewBox="0 0 16 16">
+                  <path
+                    d="M8 0A8 8 0 1 0 8 16A8 8 0 0 0 8 0ZM6.5 11.793L3.354 8.646a.5.5 0 0 1 .708-.708L6 10.293l5.646-5.647a.5.5 0 0 1 .708.708L6.5 11.793Z" />
+                </svg>
+                {% else %}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                  class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
+                  <path
+                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4m.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2" />
+                </svg>
+                {% endif %}
+                {% if item.claimed %}Item Claimed{% else %}Not Claimed Yet{% endif %}
+              </p>
 
             </div>
             {% endfor %}
             {% else %}
             <p>No items uploaded yet.</p>
             {% endif %}
-            </div>
+          </div>
         </section>
       </section>
     </div>

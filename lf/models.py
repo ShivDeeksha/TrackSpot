@@ -27,7 +27,7 @@ class WebsiteUserManager(BaseUserManager):
 def default_profile_image_path():
     return 'profile_images/default.avif'
 class WebsiteUser(AbstractBaseUser, PermissionsMixin):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
+    # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100)
     middle_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
