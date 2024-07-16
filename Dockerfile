@@ -10,6 +10,10 @@ COPY requirements.txt /app/requirements.txt
 # Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Install popper.js or other dependencies
+RUN apt-get update && apt-get install -y npm
+RUN npm install @popperjs/core
+
 # Copy the entire project into the container
 COPY . /app
 
