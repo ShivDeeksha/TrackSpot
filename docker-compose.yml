@@ -1,15 +1,6 @@
 version: '3.12'
 
 services:
-  db:
-    image: postgres:16
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-
   web:
     build: .
     command: gunicorn TrackSpot.wsgi:application --bind 0.0.0.0:8000
@@ -17,10 +8,5 @@ services:
       - .:/app
     ports:
       - "8000:8000"
-    depends_on:
-      - db
     env_file:
       - .env
-
-volumes:
-  postgres_data:
