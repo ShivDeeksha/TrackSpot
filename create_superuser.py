@@ -1,10 +1,11 @@
 import os
 import django
-from django.contrib.auth.models import User
 
 # Set up Django environment
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'TrackSpot.settings')
 django.setup()
+
+from django.contrib.auth.models import User
 
 # Create superuser if not exists
 username = 'admin'
