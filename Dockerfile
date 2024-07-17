@@ -34,8 +34,9 @@ EXPOSE 8000
 EXPOSE 80
 
 # Wait for the PostgreSQL server to be ready, then run migrations and create superuser
-CMD service nginx start && \
-    python /wait_for_db.py && \
-    python manage.py migrate && \
-    python create_superuser.py && \
-    gunicorn --config gunicorn_config.py TrackSpot.wsgi:application
+# CMD service nginx start && \
+#     python /wait_for_db.py && \
+#     python manage.py migrate && \
+#     python create_superuser.py && \
+#     gunicorn --config gunicorn_config.py TrackSpot.wsgi:application
+CMD ["sh", "-c", "service nginx start && python /wait_for_db.py && python manage.py migrate && python create_superuser.py && gunicorn --bind 0.0.0.0:8000 --workers 3 TrackSpot.wsgi:application"]
