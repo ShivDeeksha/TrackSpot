@@ -23,8 +23,7 @@ ENV DJANGO_SETTINGS_MODULE=TrackSpot.settings
 ENV PYTHONUNBUFFERED 1
 
 # Copy and set permissions for wait-for-it.sh
-COPY wait-for-it.sh /wait-for-it.sh
-RUN chmod +x /wait-for-it.sh
+COPY wait_for_db.py /wait_for_db.py
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
@@ -33,7 +32,7 @@ RUN python manage.py collectstatic --noinput
 EXPOSE 8000
 
 # Wait for the PostgreSQL server to be ready, then run migrations and create superuser
-CMD /wait-for-it.sh db 5432 -- \
+CMD python /wait_for_db.py && \
     python manage.py migrate && \
     python create_superuser.py && \
     gunicorn --config gunicorn_config.py TrackSpot.wsgi:application
