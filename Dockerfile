@@ -9,7 +9,7 @@ COPY requirements.txt /app/requirements.txt
 
 # Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
-
+RUN apt-get update && apt-get install -y nginx
 # Copy the entire project into the container
 COPY . /app
 
@@ -30,9 +30,12 @@ RUN python manage.py collectstatic --noinput
 
 # Expose port 8000 to the outside world
 EXPOSE 8000
+EXPOSE 80
+COPY nginx.conf /etc/nginx/sites-available/default
 
 # Wait for the PostgreSQL server to be ready, then run migrations and create superuser
-CMD python /wait_for_db.py && \
+CMD service nginx start && \
+    python /wait_for_db.py && \
     python manage.py migrate && \
     python create_superuser.py && \
     gunicorn --config gunicorn_config.py TrackSpot.wsgi:application
