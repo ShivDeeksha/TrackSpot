@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app
 
 # Ensure popper.min.js and popper.min.js.map are present
-RUN mkdir -p /app/static/vendors/popperjs && \
+RUN mkdir -p /app/static/vendors/popperjs /app/media && \
     curl -o /app/static/vendors/popperjs/popper.min.js https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js && \
     curl -o /app/static/vendors/popperjs/popper.min.js.map https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js.map
 
