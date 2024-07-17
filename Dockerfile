@@ -25,6 +25,13 @@ ENV PYTHONUNBUFFERED 1
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
+# Run migrations
+RUN python manage.py migrate
+
+# Copy and run the script to create the superuser
+COPY create_superuser.py /app/create_superuser.py
+RUN python create_superuser.py
+
 # Expose port 8000 to the outside world
 EXPOSE 8000
 
