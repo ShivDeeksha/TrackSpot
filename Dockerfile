@@ -13,6 +13,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the entire project into the container
 COPY . /app
 
+# Ensure popper.min.js and popper.min.js.map are present
+RUN mkdir -p /app/static/vendors/popperjs && \
+    curl -o /app/static/vendors/popperjs/popper.min.js https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js && \
+    curl -o /app/static/vendors/popperjs/popper.min.js.map https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js.map
+
 # Set environment variables for Django
 ENV DJANGO_SETTINGS_MODULE=TrackSpot.settings
 ENV PYTHONUNBUFFERED 1
