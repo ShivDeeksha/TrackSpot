@@ -29,6 +29,9 @@ RUN python manage.py collectstatic --noinput
 
 COPY nginx/nginx.conf /etc/nginx/sites-available/default
 
+RUN chmod -R 755 /app/media
+RUN chown -R www-data:www-data /app/media
+
 # Expose port 8000 to the outside world
 EXPOSE 8000
 EXPOSE 80
