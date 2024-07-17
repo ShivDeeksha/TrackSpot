@@ -14,8 +14,8 @@ services:
     image: nginx:alpine
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./media:/app/media  # Map your local media directory
-      - ./static:/app/static  # Map your local static directory
+      - ./media:/app/media 
+      - ./static:/app/static  
     ports:
       - "80:80"
     depends_on:
