@@ -31,7 +31,7 @@ RUN python manage.py collectstatic --noinput
 # Expose port 8000 to the outside world
 EXPOSE 8000
 EXPOSE 80
-COPY nginx.conf /etc/nginx/sites-available/default
+COPY nignx/nginx.conf /etc/nginx/sites-available/default
 
 # Wait for the PostgreSQL server to be ready, then run migrations and create superuser
 CMD service nginx start && \
