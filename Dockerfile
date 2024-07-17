@@ -22,18 +22,18 @@ RUN mkdir -p /app/static/vendors/popperjs && \
 ENV DJANGO_SETTINGS_MODULE=TrackSpot.settings
 ENV PYTHONUNBUFFERED 1
 
+# Copy and set permissions for wait-for-it.sh
+COPY wait-for-it.sh /wait-for-it.sh
+RUN chmod +x /wait-for-it.sh
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
-# Run migrations
-# RUN python manage.py migrate
-
-# Copy and run the script to create the superuser
-COPY create_superuser.py /app/create_superuser.py
-RUN python create_superuser.py
 
 # Expose port 8000 to the outside world
 EXPOSE 8000
 
-# Run the Gunicorn server
-CMD ["gunicorn", "--config", "gunicorn_config.py", "TrackSpot.wsgi:application"]
+# Wait for the PostgreSQL server to be ready, then run migrations and create superuser
+CMD /wait-for-it.sh db 5432 -- \
+    python manage.py migrate && \
+    python create_superuser.py && \
+    gunicorn --config gunicorn_config.py TrackSpot.wsgi:application
