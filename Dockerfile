@@ -17,11 +17,11 @@ COPY . /app
 ENV DJANGO_SETTINGS_MODULE=TrackSpot.settings
 ENV PYTHONUNBUFFERED 1
 
-# Run collectstatic
+# Collect static files
 RUN python manage.py collectstatic --noinput
 
 # Expose port 8000 to the outside world
 EXPOSE 8000
 
 # Run the Gunicorn server
-CMD ["gunicorn", "TrackSpot.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "--config", "gunicorn_config.py", "TrackSpot.wsgi:application"]
