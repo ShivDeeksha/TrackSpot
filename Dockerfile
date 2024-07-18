@@ -28,8 +28,11 @@ COPY wait_for_db.py /wait_for_db.py
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
+# Create media directory and set permissions
+RUN mkdir -p /app/media
 RUN chmod -R 755 /app/media
 RUN chown -R www-data:www-data /app/media
+
 
 # Expose port 8000 to the outside world
 EXPOSE 8000
