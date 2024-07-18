@@ -22,7 +22,7 @@ RUN mkdir -p /app/static/vendors/popperjs /app/media && \
 ENV DJANGO_SETTINGS_MODULE=TrackSpot.settings
 ENV PYTHONUNBUFFERED 1
 
-# Copy and set permissions for wait-for-it.sh
+# Copy and set permissions for wait-for-db.py
 COPY wait_for_db.py /wait_for_db.py
 
 # Collect static files
@@ -33,9 +33,8 @@ RUN mkdir -p /app/media
 RUN chmod -R 755 /app/media
 RUN chown -R www-data:www-data /app/media
 
-
 # Expose port 8000 to the outside world
 EXPOSE 8000
 
-# Wait for the PostgreSQL server to be ready, then run migrations and create superuser
+# Wait for the PostgreSQL server to be ready, then run migrations and start the server
 CMD ["sh", "-c", "python /wait_for_db.py && python manage.py migrate && python create_superuser.py && gunicorn --bind 0.0.0.0:8000 --workers 3 TrackSpot.wsgi:application"]

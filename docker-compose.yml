@@ -6,6 +6,7 @@ services:
     command: gunicorn --bind 0.0.0.0:8000 --workers 3 TrackSpot.wsgi:application
     volumes:
       - .:/app
+      - ./media:/app/media
     env_file:
       - .env
 
