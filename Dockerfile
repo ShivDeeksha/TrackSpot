@@ -10,6 +10,7 @@ COPY requirements.txt /app/requirements.txt
 # Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 RUN apt-get update && apt-get install -y nginx
+
 # Copy the entire project into the container
 COPY . /app
 
@@ -24,6 +25,7 @@ ENV PYTHONUNBUFFERED 1
 
 # Copy and set permissions for wait-for-it.sh
 COPY wait_for_db.py /wait_for_db.py
+
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
@@ -36,10 +38,4 @@ RUN chown -R www-data:www-data /app/media
 EXPOSE 8000
 EXPOSE 80
 
-# Wait for the PostgreSQL server to be ready, then run migrations and create superuser
-# CMD service nginx start && \
-#     python /wait_for_db.py && \
-#     python manage.py migrate && \
-#     python create_superuser.py && \
-#     gunicorn --config gunicorn_config.py TrackSpot.wsgi:application
 CMD ["sh", "-c", "service nginx start && python /wait_for_db.py && python manage.py migrate && python create_superuser.py && gunicorn --bind 0.0.0.0:8000 --workers 3 TrackSpot.wsgi:application"]
