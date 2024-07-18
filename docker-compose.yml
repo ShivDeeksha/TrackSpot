@@ -5,9 +5,9 @@ services:
     build: .
     command: gunicorn --bind 0.0.0.0:8000 --workers 3 TrackSpot.wsgi:application
     volumes:
-      - .:/app
-      - ./media:/app/media
-      - ./staticfiles:/app/staticfiles
+      # - .:/app
+      - media_data:/app/media
+      - static_data:/app/staticfiles
     env_file:
       - .env
 
@@ -21,3 +21,6 @@ services:
       - "80:80"
     depends_on:
       - web
+volumes:
+  static_data:
+  media_data:
