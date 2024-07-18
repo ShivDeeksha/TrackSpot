@@ -162,14 +162,14 @@ USE_I18N = True
 USE_TZ = True
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'app/media')
 
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 
 # The directory to collect static files to
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'app/staticfiles')
 
 # Additional locations of static files
 STATICFILES_DIRS = [
